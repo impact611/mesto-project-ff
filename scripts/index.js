@@ -24,9 +24,9 @@ function deleteCard(event) {
 }
 // @todo: Вывести карточки на страницу
 function renderAllCards(cardsArray) {
-  for (let i = 0; i < cardsArray.length; i++) {
-    createCard(cardsArray[i].link, cardsArray[i].name, deleteCard);
-  }
+ cardsArray.forEach(element => {
+  createCard(element.link, element.name, deleteCard)
+ });
 }
 
 renderAllCards(window.initialCards);
