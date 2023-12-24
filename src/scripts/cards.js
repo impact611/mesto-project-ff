@@ -25,4 +25,4 @@ const initialCards = [
     }
 ];
 
-window.initialCards = initialCards;
+export default initialCards
