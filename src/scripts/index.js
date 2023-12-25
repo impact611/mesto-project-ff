@@ -13,6 +13,12 @@ const editProfileTitleInput = document.querySelector(".popup__input_type_name");
 const editProfileDescriptionInput = document.querySelector(
   ".popup__input_type_description"
 );
+
+const addCardTitleInput = document.querySelector(
+  ".popup__input_type_card-name"
+);
+const addCardUrlInput = document.querySelector(".popup__input_type_url");
+
 const openEditProfileModalButton = document.querySelector(
   ".profile__edit-button"
 );
@@ -21,10 +27,13 @@ const editProfileForm = document.querySelector('form[name="edit-profile"]');
 const addCardModal = document.querySelector(".popup_type_new-card");
 const addCardForm = document.querySelector('form[name="new-place"]');
 const openAddCardModalButton = document.querySelector(".profile__add-button");
+const imageModal = document.querySelector(".popup_type_image");
+const modalImage = imageModal.querySelector(".popup__image");
+const modalCaption = imageModal.querySelector(".popup__caption");
 
 closeButtons.forEach((button) => {
+  const popup = button.closest(".popup");
   button.addEventListener("click", () => {
-    const popup = button.closest(".popup");
     closeModal(popup);
   });
 });
@@ -52,10 +61,12 @@ function submitEditProfileForm(evt) {
 function submitAddCardForm(evt) {
   evt.preventDefault();
 
-  const name = addCardForm.querySelector(".popup__input_type_card-name").value;
-  const link = addCardForm.querySelector(".popup__input_type_url").value;
-
-  const newCard = createCard(link, name, deleteCard, openImageModal);
+  const newCard = createCard(
+    addCardUrlInput.value,
+    addCardTitleInput.value,
+    deleteCard,
+    openImageModal
+  );
   placesListContainer.prepend(newCard);
 
   addCardForm.reset();
@@ -71,10 +82,6 @@ function renderAllCards(cardsArray) {
 }
 
 function openImageModal(imageSrc, imageName) {
-  const imageModal = document.querySelector(".popup_type_image");
-  const modalImage = imageModal.querySelector(".popup__image");
-  const modalCaption = imageModal.querySelector(".popup__caption");
-
   modalImage.src = imageSrc;
   modalImage.alt = imageName;
   modalCaption.textContent = imageName;

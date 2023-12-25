@@ -13,6 +13,7 @@ export function createCard(link, name, deleteCard, openModal) {
   newCardElementImage.addEventListener("click", () => {
     openModal(link, name);
   });
+  document.addEventListener("click", handleLikeButtonClick);
 
   return newCardElement;
 }
