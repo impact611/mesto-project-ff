@@ -8,7 +8,7 @@ export function createCard(link, name, deleteCard, openModal) {
   newCardElement.querySelector(".card__title").textContent = name;
   newCardElement
     .querySelector(".card__delete-button")
-    .addEventListener("click", deleteCard);
+    .addEventListener("click", () => deleteCard(newCardElement));
 
   newCardElementImage.addEventListener("click", () => {
     openModal(link, name);
@@ -18,9 +18,8 @@ export function createCard(link, name, deleteCard, openModal) {
   return newCardElement;
 }
 
-export function deleteCard(event) {
-  const element = event.target.closest(".card");
-  element.remove();
+export function deleteCard(CardElement) {
+  CardElement.remove();
 }
 
 export function handleLikeButtonClick(event) {
