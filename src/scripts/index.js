@@ -1,6 +1,6 @@
 import "./../pages/index.css";
 import initialCards from "./cards.js";
-import { createCard, deleteCard, handleLikeButtonClick } from "./card.js";
+import { createCard, deleteCard } from "./card.js";
 import { openModal, closeModal } from "./modal.js";
 
 const placesListContainer = document.querySelector(".places__list");
@@ -41,7 +41,6 @@ openAddCardModalButton.addEventListener("click", () => {
   openModal(addCardModal);
 });
 addCardModal.addEventListener("submit", submitAddCardForm);
-document.addEventListener("click", handleLikeButtonClick);
 openEditProfileModalButton.addEventListener("click", () => {
   editProfileTitleInput.value = profileTitleOutput.textContent;
   editProfileDescriptionInput.value = profileDescriptionOutput.textContent;

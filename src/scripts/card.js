@@ -13,7 +13,9 @@ export function createCard(link, name, deleteCard, openModal) {
   newCardElementImage.addEventListener("click", () => {
     openModal(link, name);
   });
-  document.addEventListener("click", handleLikeButtonClick);
+  newCardElement
+    .querySelector(".card__like-button")
+    .addEventListener("click", handleLike);
 
   return newCardElement;
 }
@@ -22,7 +24,7 @@ export function deleteCard(CardElement) {
   CardElement.remove();
 }
 
-export function handleLikeButtonClick(event) {
+function handleLike(event) {
   if (event.target.classList.contains("card__like-button")) {
     event.target.classList.toggle("card__like-button_is-active");
   }
