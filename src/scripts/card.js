@@ -1,4 +1,4 @@
-export function createCard(link, name, deleteCard, openModal) {
+export function createCard(link, name, deleteCard, openModal, handleLike) {
   const cardsTemplate = document.querySelector("#card-template").content;
   const newCardElement = cardsTemplate.querySelector(".card").cloneNode(true);
   const newCardElementImage = newCardElement.querySelector(".card__image");
@@ -15,16 +15,16 @@ export function createCard(link, name, deleteCard, openModal) {
   });
   newCardElement
     .querySelector(".card__like-button")
-    .addEventListener("click", handleLike);
+    .addEventListener("click", (event) => handleLike(event));
 
   return newCardElement;
 }
 
-export function deleteCard(CardElement) {
-  CardElement.remove();
+export function deleteCard(cardElement) {
+  cardElement.remove();
 }
 
-function handleLike(event) {
+export function handleLike(event) {
   if (event.target.classList.contains("card__like-button")) {
     event.target.classList.toggle("card__like-button_is-active");
   }

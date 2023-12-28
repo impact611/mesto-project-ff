@@ -1,6 +1,6 @@
 import "./../pages/index.css";
 import initialCards from "./cards.js";
-import { createCard, deleteCard } from "./card.js";
+import { createCard, deleteCard, handleLike } from "./card.js";
 import { openModal, closeModal } from "./modal.js";
 
 const placesListContainer = document.querySelector(".places__list");
@@ -64,7 +64,8 @@ function submitAddCardForm(evt) {
     addCardUrlInput.value,
     addCardTitleInput.value,
     deleteCard,
-    openImageModal
+    openImageModal,
+    handleLike
   );
   placesListContainer.prepend(newCard);
 
@@ -75,7 +76,7 @@ function submitAddCardForm(evt) {
 function renderAllCards(cardsArray) {
   cardsArray.forEach((element) => {
     placesListContainer.append(
-      createCard(element.link, element.name, deleteCard, openImageModal)
+      createCard(element.link, element.name, deleteCard, openImageModal, handleLike)
     );
   });
 }
