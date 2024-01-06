@@ -8,7 +8,7 @@ export function createCard(card, removeCard, openModal, handleLike, userId) {
   const cardLikeButton = cardElement.querySelector(".card__like-button");
   const cardLikeCount = cardElement.querySelector(".card__like-count");
   const cardDeleteButton = cardElement.querySelector(".card__delete-button");
-
+  console.log("cardc", card);
   cardElement.setAttribute("data-id", card.id);
   cardImage.src = card.link;
   cardImage.alt = card.name;

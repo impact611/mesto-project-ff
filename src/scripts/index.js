@@ -48,6 +48,8 @@ const editAvatarForm = document.querySelector('form[name="edit-avatar"]');
 const editAvatarUrlInput = editAvatarForm.querySelector(
   ".popup__input_type_url"
 );
+let userId;
+
 openEditAvatarModalButton.addEventListener("click", () => {
   openModal(editAvatarModal);
 });
@@ -85,8 +87,8 @@ function submitEditAvatarForm(evt) {
   toggleSubmitButton(true, editAvatarForm.querySelector(".popup__button"));
 
   editUserAvatar(editAvatarUrlInput.value)
-    .then((res) => {
-      openEditAvatarModalButton.src = res.avatar;
+    .then((result) => {
+      profileAvatarOutput.src = result.avatar;
 
       toggleSubmitButton(false, editAvatarForm.querySelector(".popup__button"));
       closeModal(editAvatarModal);
@@ -130,10 +132,22 @@ function submitAddCardForm(evt) {
   toggleSubmitButton(true, addCardModal.querySelector(".popup__button"));
 
   addCard(addCardTitleInput.value, addCardUrlInput.value)
-    .then((res) => {
-      placesListContainer.prepend(
-        createCard(res, removeCard, openImageModal, handleLike, res.owner._id)
+    .then((result) => {
+      console.log("result", result);
+      const card = createCard(
+        {
+          name: result.name,
+          link: result.link,
+          id: result._id,
+          ownerId: result.owner._id,
+          likes: result.likes,
+        },
+        removeCard,
+        openImageModal,
+        handleLike,
+        userId
       );
+      placesListContainer.prepend(card);
       addCardForm.reset();
       clearValidation(addCardForm, validationConfig);
       closeModal(addCardModal);
@@ -182,7 +196,7 @@ Promise.all([fetchUserData(), fetchCards()])
     profileTitleOutput.textContent = user.name;
     profileDescriptionOutput.textContent = user.about;
     profileAvatarOutput.src = user.avatar;
-
+    userId = user._id;
     renderAllCards(cards, user._id);
   })
   .catch((error) => {
