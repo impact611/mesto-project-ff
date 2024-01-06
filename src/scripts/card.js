@@ -34,8 +34,11 @@ export function createCard(card, removeCard, openModal, handleLike, userId) {
 
 export function removeCard(cardElement) {
   const cardId = cardElement.getAttribute("data-id");
-  deleteCard(cardId);
-  cardElement.remove();
+  deleteCard(cardId)
+    .then(() => {
+      cardElement.remove();
+    })
+    .catch((error) => console.log(error));
 }
 
 export function handleLike(cardElement) {

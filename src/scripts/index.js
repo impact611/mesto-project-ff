@@ -27,9 +27,7 @@ const addCardTitleInput = document.querySelector(
   ".popup__input_type_card-name"
 );
 const addCardForm = document.querySelector('form[name="new-place"]');
-const addCardUrlInput = addCardForm.querySelector(
-  ".popup__input_type_card-name"
-);
+const addCardUrlInput = addCardForm.querySelector(".popup__input_type_url");
 const openEditProfileModalButton = document.querySelector(
   ".profile__edit-button"
 );
@@ -40,7 +38,7 @@ const addCardModal = document.querySelector(".popup_type_new-card");
 const openAddCardModalButton = document.querySelector(".profile__add-button");
 const imageModal = document.querySelector(".popup_type_image");
 const modalImage = imageModal.querySelector(".popup__image");
-const modalCaption = imageModal.querySelector(".popup__caption");
+const captionImageModal = imageModal.querySelector(".popup__caption");
 
 const openEditAvatarModalButton = document.querySelector(
   ".profile__image-container"
@@ -63,8 +61,9 @@ closeButtons.forEach((button) => {
 openAddCardModalButton.addEventListener("click", () => {
   openModal(addCardModal);
 });
-addCardModal.addEventListener("submit", submitAddCardForm);
+addCardForm.addEventListener("submit", submitAddCardForm);
 openEditProfileModalButton.addEventListener("click", () => {
+  clearValidation(editProfileForm, validationConfig);
   editProfileTitleInput.value = profileTitleOutput.textContent;
   editProfileDescriptionInput.value = profileDescriptionOutput.textContent;
   openModal(editProfileModal);
@@ -87,7 +86,6 @@ function submitEditAvatarForm(evt) {
 
   editUserAvatar(editAvatarUrlInput.value)
     .then((res) => {
-      console.log("resultg", res);
       openEditAvatarModalButton.src = res.avatar;
 
       toggleSubmitButton(false, editAvatarForm.querySelector(".popup__button"));
@@ -137,6 +135,7 @@ function submitAddCardForm(evt) {
         createCard(res, removeCard, openImageModal, handleLike, res.owner._id)
       );
       addCardForm.reset();
+      clearValidation(addCardForm, validationConfig);
       closeModal(addCardModal);
     })
     .catch((err) => console.log(err))
@@ -148,14 +147,13 @@ function submitAddCardForm(evt) {
 function openImageModal(imageSrc, imageName) {
   modalImage.src = imageSrc;
   modalImage.alt = imageName;
-  modalCaption.textContent = imageName;
+  captionImageModal.textContent = imageName;
 
   openModal(imageModal);
 }
 
 function toggleSubmitButton(isLoading, button) {
   button.textContent = isLoading ? "Сохранение..." : "Сохранить";
-  button.disabled = isLoading ? true : false;
 }
 
 function renderAllCards(cardsArray, userId) {
@@ -203,4 +201,3 @@ enableValidation({
 clearValidation(addCardForm, validationConfig);
 clearValidation(editProfileForm, validationConfig);
 clearValidation(editAvatarForm, validationConfig);
-// renderAllCards(initialCards);
