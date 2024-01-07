@@ -27,9 +27,7 @@ const addCardTitleInput = document.querySelector(
   ".popup__input_type_card-name"
 );
 const addCardForm = document.querySelector('form[name="new-place"]');
-const addCardUrlInput = addCardForm.querySelector(
-  ".popup__input_type_card-name"
-);
+const addCardUrlInput = addCardForm.querySelector(".popup__input_type_url");
 const openEditProfileModalButton = document.querySelector(
   ".profile__edit-button"
 );
@@ -40,7 +38,7 @@ const addCardModal = document.querySelector(".popup_type_new-card");
 const openAddCardModalButton = document.querySelector(".profile__add-button");
 const imageModal = document.querySelector(".popup_type_image");
 const modalImage = imageModal.querySelector(".popup__image");
-const modalCaption = imageModal.querySelector(".popup__caption");
+const captionImageModal = imageModal.querySelector(".popup__caption");
 
 const openEditAvatarModalButton = document.querySelector(
   ".profile__image-container"
@@ -50,6 +48,8 @@ const editAvatarForm = document.querySelector('form[name="edit-avatar"]');
 const editAvatarUrlInput = editAvatarForm.querySelector(
   ".popup__input_type_url"
 );
+let userId;
+
 openEditAvatarModalButton.addEventListener("click", () => {
   openModal(editAvatarModal);
 });
@@ -63,8 +63,9 @@ closeButtons.forEach((button) => {
 openAddCardModalButton.addEventListener("click", () => {
   openModal(addCardModal);
 });
-addCardModal.addEventListener("submit", submitAddCardForm);
+addCardForm.addEventListener("submit", submitAddCardForm);
 openEditProfileModalButton.addEventListener("click", () => {
+  clearValidation(editProfileForm, validationConfig);
   editProfileTitleInput.value = profileTitleOutput.textContent;
   editProfileDescriptionInput.value = profileDescriptionOutput.textContent;
   openModal(editProfileModal);
@@ -86,9 +87,8 @@ function submitEditAvatarForm(evt) {
   toggleSubmitButton(true, editAvatarForm.querySelector(".popup__button"));
 
   editUserAvatar(editAvatarUrlInput.value)
-    .then((res) => {
-      console.log("resultg", res);
-      openEditAvatarModalButton.src = res.avatar;
+    .then((result) => {
+      profileAvatarOutput.src = result.avatar;
 
       toggleSubmitButton(false, editAvatarForm.querySelector(".popup__button"));
       closeModal(editAvatarModal);
@@ -132,11 +132,24 @@ function submitAddCardForm(evt) {
   toggleSubmitButton(true, addCardModal.querySelector(".popup__button"));
 
   addCard(addCardTitleInput.value, addCardUrlInput.value)
-    .then((res) => {
-      placesListContainer.prepend(
-        createCard(res, removeCard, openImageModal, handleLike, res.owner._id)
+    .then((result) => {
+      console.log("result", result);
+      const card = createCard(
+        {
+          name: result.name,
+          link: result.link,
+          id: result._id,
+          ownerId: result.owner._id,
+          likes: result.likes,
+        },
+        removeCard,
+        openImageModal,
+        handleLike,
+        userId
       );
+      placesListContainer.prepend(card);
       addCardForm.reset();
+      clearValidation(addCardForm, validationConfig);
       closeModal(addCardModal);
     })
     .catch((err) => console.log(err))
@@ -148,14 +161,13 @@ function submitAddCardForm(evt) {
 function openImageModal(imageSrc, imageName) {
   modalImage.src = imageSrc;
   modalImage.alt = imageName;
-  modalCaption.textContent = imageName;
+  captionImageModal.textContent = imageName;
 
   openModal(imageModal);
 }
 
 function toggleSubmitButton(isLoading, button) {
   button.textContent = isLoading ? "Сохранение..." : "Сохранить";
-  button.disabled = isLoading ? true : false;
 }
 
 function renderAllCards(cardsArray, userId) {
@@ -184,7 +196,7 @@ Promise.all([fetchUserData(), fetchCards()])
     profileTitleOutput.textContent = user.name;
     profileDescriptionOutput.textContent = user.about;
     profileAvatarOutput.src = user.avatar;
-
+    userId = user._id;
     renderAllCards(cards, user._id);
   })
   .catch((error) => {
@@ -203,4 +215,3 @@ enableValidation({
 clearValidation(addCardForm, validationConfig);
 clearValidation(editProfileForm, validationConfig);
 clearValidation(editAvatarForm, validationConfig);
-// renderAllCards(initialCards);
